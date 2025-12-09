@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u70e)z!f(1=y8&dpjsp7)c_l1kwg^is30z=85v-mj3w1&-y&n&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -60,6 +60,8 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:5173/"
@@ -91,9 +93,11 @@ WSGI_APPLICATION = 'urgencias_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'urgencias_api_bd',
-        'USER': 'root',
-        'PASSWORD': 'root'
+        'NAME': 'riquelmecata$urgencias_api_bd',
+        'USER': 'riquelmecata',
+        'PASSWORD': 'dW7B=3tty.-G5B^',
+        'HOST': 'riquelmecata.mysql.pythonanywhere-services.com', # <--- ¡ESTO ES LO IMPORTANTE!
+        'PORT': '3306',
     }
 }
 
@@ -132,7 +136,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# URL con la que el navegador pedirá los archivos
+STATIC_URL = '/static/'
+
+# CARPETA donde Django guardará todos los archivos al hacer collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -1,12 +1,16 @@
 from django.contrib import admin
+# Asegúrate de importar TODOS tus modelos aquí 👇
+from .models import Cargo, Usuario, Formulario, Evidencia, Historial
 
-from urgencias.models import Cargo, Usuario
+# Registros simples
+admin.site.register(Cargo)
+admin.site.register(Usuario)
+admin.site.register(Evidencia)
+admin.site.register(Historial)
 
-class CargoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'nombre_cargo']
-
-class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ['id', 'nombre_usuario', 'apellido_usuario', 'email_usuario', 'cargo_usuario']
-
-admin.site.register(Cargo, CargoAdmin)
-admin.site.register(Usuario, UsuarioAdmin)
+# Registro "bonito" para el Formulario 
+# (Así podrás ver el nombre del paciente y la fecha en la lista antes de borrar)
+@admin.register(Formulario)
+class FormularioAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre_formulario', 'fecha_envio_formulario', 'prioridad_formulario')
+    search_fields = ('nombre_formulario',)

@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import JsonResponse
 
@@ -84,6 +85,8 @@ def _get_user_id_from_request(request):
 #     datos = { "form" : list(form.values('id', 'nombre_formulario', 'genero_formulario', 'edad_formulario', 'ant_formulario', 'alergia_formulario', 'motivo_formulario', 'presion_formulario', 'pulso_formulario', 'temperatura_formulario', 'saturacion_formulario', 'fecha_envio_formulario', 'observaciones_formulario', 'prioridad_formulario', 'preparacion_formulario', 'diagnostico_formulario', 'tratamiento_formulario'))}
 #     return JsonResponse(datos)
 
+@csrf_exempt
+
 @api_view(['POST'])
 def formularios_create(request):
     # Crear formulario sin imágenes primero
@@ -112,21 +115,21 @@ def formularios_create(request):
 @api_view(['GET'])
 def formularios_list(request):
     if request.method == 'GET':
-        form = Formulario.objects.all()
+        form = Formulario.objects.all().order_by('-id')
         ser = FormularioSerializer(form, many=True)
         return Response(ser.data)
-    
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def formulario_detail(request, id):
     try:
         form = Formulario.objects.get(id = id)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+
     if request.method == 'GET':
         ser = FormularioSerializer(form)
         return Response(ser.data)
-    
+
     if request.method == 'PUT':
         ser = FormularioSerializer(form, data=request.data, partial=True)
         if ser.is_valid():
@@ -139,7 +142,7 @@ def formulario_detail(request, id):
             return Response(ser.data, status=status.HTTP_201_CREATED)
         else:
             return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
     if request.method == 'DELETE':
         usuario_id = _get_user_id_from_request(request)
 
@@ -148,7 +151,7 @@ def formulario_detail(request, id):
 
         form.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
 
 @api_view(['POST'])
 def login(request):
